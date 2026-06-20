@@ -1,0 +1,31 @@
+[project]
+name = "sko-exam"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas>=2.0.0",
+    "scikit-learn>=1.3.0",
+    "numpy>=1.24.0",
+    "openpyxl>=3.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+markers = [
+    "unit: Unit-Tests (keine externen Abhängigkeiten)",
+    "integration: Integration-Tests (DB, Dateisystem, etc.)",
+    "smoke: Breite Schnelltests für kritische Hauptpfade",
+    "regression: Tests für bereits abgesicherte Fehlerbilder oder Kernverhalten",
+    "db: Tests mit echter Datenbankdatei oder Datenbankschema",
+    "acceptance: End-to-End- bzw. fachliche Akzeptanztests",
+]
+
+[tool.ruff]
+line-length = 88

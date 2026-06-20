@@ -1,5 +1,4 @@
 import os
-import sys  # LINTING-FEHLER 4: ungenutzter Import (flake8 F401)
 import pickle
 import pandas as pd
 from sklearn.linear_model import LinearRegression
