@@ -1,7 +1,7 @@
 import pickle
 import re
-import numpy as np
 import pytest
+import pandas as pd
 from unittest.mock import patch
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import LabelEncoder
@@ -14,10 +14,11 @@ from src.predict import predict
 
 def _write_fake_model(path):
     model = LinearRegression()
-    model.fit(
+    features = pd.DataFrame(
         [[2020, 1, 0, 0], [2021, 6, 0, 0], [2022, 3, 0, 0], [2023, 9, 0, 0]],
-        [3.0, 3.5, 2.8, 3.2]
+        columns=['jahr', 'monat', 'region_enc', 'gruppe_enc'],
     )
+    model.fit(features, [3.0, 3.5, 2.8, 3.2])
     le_region = LabelEncoder()
     le_gruppe = LabelEncoder()
     le_region.fit(['Deutsche Schweiz'])
@@ -32,6 +33,7 @@ def _write_fake_model(path):
 # Unit-Tests: predict()
 # ---------------------------------------------------------------------------
 
+@pytest.mark.unit
 def test_predict_prints_region_and_year(tmp_path, capsys):
     """Ausgabe muss Region und Jahr enthalten."""
     model_path = tmp_path / 'models' / 'model.pkl'
@@ -45,6 +47,7 @@ def test_predict_prints_region_and_year(tmp_path, capsys):
     assert '2025' in out
 
 
+@pytest.mark.unit
 def test_predict_output_contains_percentage(tmp_path, capsys):
     """Ausgabe muss einen Prozentwert im Format '0.00%' enthalten."""
     model_path = tmp_path / 'models' / 'model.pkl'
@@ -57,6 +60,7 @@ def test_predict_output_contains_percentage(tmp_path, capsys):
     assert re.search(r'\d+\.\d{2}%', out), f"Kein Prozentwert in Ausgabe: {out!r}"
 
 
+@pytest.mark.unit
 def test_predict_raises_if_model_missing():
     """Fehlende Modelldatei muss FileNotFoundError auslösen."""
     with patch('src.predict.MODEL_PATH', '/nonexistent/path/model.pkl'):

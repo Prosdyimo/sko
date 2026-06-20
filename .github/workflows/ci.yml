@@ -1,0 +1,54 @@
+name: CI/CD Pipeline
+
+on: [pull_request]
+
+jobs:
+  lint-and-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Abhängigkeiten installieren
+        run: pip install '.[dev]'
+
+      - name: Linting (ruff)
+        run: ruff check .
+
+      - name: Unit-Tests mit Coverage ausführen
+        run: pytest -m unit --cov=src --cov-report=xml --cov-fail-under=80 -v --tb=short --log-cli-level=WARNING
+
+      - name: Coverage-Report als Artefakt speichern
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+  integration-tests:
+    needs: lint-and-unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Abhängigkeiten installieren
+        run: pip install '.[dev]'
+
+      - name: Integration-Tests ausführen
+        run: pytest -m integration -v --tb=long --log-cli-level=WARNING
+
+  deploy-staging:
+    needs: integration-tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deployment zu Staging
+        run: echo "Hier Deployment-Skript aufrufen (z.B. Ansible oder Cloud-Push)"

@@ -36,6 +36,7 @@ def _make_db():
 # Unit-Test: _load_altersgruppen
 # ---------------------------------------------------------------------------
 
+@pytest.mark.unit
 def test_load_altersgruppen_inserts_rows():
     """Prüft ob _load_altersgruppen die Zeilen korrekt transformiert und einfügt."""
     # Fake-DataFrame: Sprachregion + Gruppen + eine Datumsspalte (Timestamp hat .year)
@@ -64,6 +65,7 @@ def test_load_altersgruppen_inserts_rows():
     conn.close()
 
 
+@pytest.mark.unit
 def test_load_altersgruppen_returns_row_count():
     """Rückgabewert muss der Anzahl einzufügender Zeilen entsprechen."""
     datum_col = pd.Timestamp('2023-06-01')
@@ -83,6 +85,7 @@ def test_load_altersgruppen_returns_row_count():
 # Unit-Test: _load_jugendliche
 # ---------------------------------------------------------------------------
 
+@pytest.mark.unit
 def test_load_jugendliche_inserts_rows():
     """Prüft ob _load_jugendliche Geschlecht-Spalte korrekt verarbeitet."""
     datum_col = pd.Timestamp('2024-03-01')
@@ -109,6 +112,7 @@ def test_load_jugendliche_inserts_rows():
     conn.close()
 
 
+@pytest.mark.unit
 def test_load_jugendliche_multiple_date_columns():
     """Mehrere Datumsspalten erzeugen mehrere Zeilen (melt)."""
     d1 = pd.Timestamp('2023-01-01')
@@ -127,10 +131,29 @@ def test_load_jugendliche_multiple_date_columns():
     conn.close()
 
 
+@pytest.mark.unit
+def test_ingest_calls_loaders_commit_and_close(capsys):
+    """ingest() muss Loader aufrufen, committen und Verbindung schliessen."""
+    with patch('src.ingest_data.sqlite3.connect') as connect_mock, \
+         patch('src.ingest_data._load_altersgruppen', return_value=2) as load_alt_mock, \
+         patch('src.ingest_data._load_jugendliche', return_value=3) as load_jug_mock:
+        conn = connect_mock.return_value
+        ingest()
+
+    load_alt_mock.assert_called_once_with(conn)
+    load_jug_mock.assert_called_once_with(conn)
+    conn.commit.assert_called_once()
+    conn.close.assert_called_once()
+    out = capsys.readouterr().out
+    assert 'Ingestion: 2 Altersgruppen- und 3 Jugendlichen-Zeilen geschrieben.' in out
+
+
 # ---------------------------------------------------------------------------
 # Integration-Test: ingest()
 # ---------------------------------------------------------------------------
 
+@pytest.mark.integration
+@pytest.mark.db
 def test_ingest_commits_to_db(tmp_path, capsys):
     """Prüft den kompletten ingest()-Durchlauf mit gepatchter DB und Excel-Dateien."""
     db_path = tmp_path / 'test.db'
