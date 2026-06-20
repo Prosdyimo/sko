@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtuelle Umgebungen
+.venv/
+venv/
+env/
+
+# Datenbank
+*.db
+*.sqlite
+*.sqlite3
+
+# Modell-Artefakte
+models/*.pkl
+models/*.joblib
+
+# Generierte Daten (werden von DVC getrackt)
+data/training_data.csv
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
