@@ -1,6 +1,7 @@
 import pickle
 import re
 import pytest
+import pandas as pd
 from unittest.mock import patch
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import LabelEncoder
@@ -13,10 +14,11 @@ from src.predict import predict
 
 def _write_fake_model(path):
     model = LinearRegression()
-    model.fit(
+    features = pd.DataFrame(
         [[2020, 1, 0, 0], [2021, 6, 0, 0], [2022, 3, 0, 0], [2023, 9, 0, 0]],
-        [3.0, 3.5, 2.8, 3.2]
+        columns=['jahr', 'monat', 'region_enc', 'gruppe_enc'],
     )
+    model.fit(features, [3.0, 3.5, 2.8, 3.2])
     le_region = LabelEncoder()
     le_gruppe = LabelEncoder()
     le_region.fit(['Deutsche Schweiz'])

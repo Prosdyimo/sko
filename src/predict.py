@@ -1,6 +1,7 @@
 import os
 import pickle
 import numpy as np
+import pandas as pd
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 MODEL_PATH = os.path.join(ROOT_DIR, 'models', 'model.pkl')
@@ -23,7 +24,10 @@ def predict():
     region_enc = le_region.transform([region])[0]
     gruppe_enc = le_gruppe.transform([altersgruppe])[0]
 
-    X_pred = np.array([[jahr, monat, region_enc, gruppe_enc]])
+    X_pred = pd.DataFrame(
+        np.array([[jahr, monat, region_enc, gruppe_enc]]),
+        columns=['jahr', 'monat', 'region_enc', 'gruppe_enc'],
+    )
     vorhersage = model.predict(X_pred)[0]
 
     print(

@@ -90,7 +90,10 @@ def test_train_model_can_predict(tmp_path):
 
     region_enc = md['le_region'].transform(['Deutsche Schweiz'])[0]
     gruppe_enc = md['le_gruppe'].transform(['25-49 Jahre'])[0]
-    X = np.array([[2025, 6, region_enc, gruppe_enc]])
+    X = pd.DataFrame(
+        np.array([[2025, 6, region_enc, gruppe_enc]]),
+        columns=['jahr', 'monat', 'region_enc', 'gruppe_enc'],
+    )
     pred = md['model'].predict(X)[0]
 
     assert isinstance(float(pred), float)

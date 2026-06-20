@@ -21,6 +21,10 @@ pythonpath = ["."]
 markers = [
     "unit: Unit-Tests (keine externen Abhängigkeiten)",
     "integration: Integration-Tests (DB, Dateisystem, etc.)",
+    "smoke: Breite Schnelltests für kritische Hauptpfade",
+    "regression: Tests für bereits abgesicherte Fehlerbilder oder Kernverhalten",
+    "db: Tests mit echter Datenbankdatei oder Datenbankschema",
+    "acceptance: End-to-End- bzw. fachliche Akzeptanztests",
 ]
 
 [tool.ruff]

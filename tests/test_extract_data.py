@@ -5,7 +5,8 @@ import pytest
 from src.extract_data import extract
 
 
-@pytest.mark.unit
+@pytest.mark.integration
+@pytest.mark.db
 def test_extract_creates_csv(tmp_path):
     db_path = tmp_path / "test.db"
     output_csv = tmp_path / "training_data.csv"

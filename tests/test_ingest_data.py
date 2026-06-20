@@ -152,6 +152,8 @@ def test_ingest_calls_loaders_commit_and_close(capsys):
 # Integration-Test: ingest()
 # ---------------------------------------------------------------------------
 
+@pytest.mark.integration
+@pytest.mark.db
 def test_ingest_commits_to_db(tmp_path, capsys):
     """Prüft den kompletten ingest()-Durchlauf mit gepatchter DB und Excel-Dateien."""
     db_path = tmp_path / 'test.db'
