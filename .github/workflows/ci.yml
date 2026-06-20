@@ -1,27 +1,44 @@
-name: Unit Tests
+name: CI/CD Pipeline
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
-  unit-tests:
+  lint-and-unit-tests:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Python einrichten
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Abhängigkeiten installieren
-        run: pip install -r requirements.txt pytest
+        run: pip install -r requirements.txt pytest pytest-cov ruff
+
+      - name: Linting (Fail Fast)
+        run: ruff check . 
 
       - name: Unit-Tests ausführen
-        run: pytest -m unit -v
+        run: pytest -m unit --cov=dein_projekt --cov-fail-under=80 -v
 
+  integration-tests:
+    needs: lint-and-unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Abhängigkeiten installieren
+        run: pip install -r requirements.txt pytest
       - name: Integration Tests
         run: pytest -m integration -v
 
-      - name: Linting
-        run: ruff check .
+  deploy-staging:
+    needs: integration-tests
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deployment zu Staging
+        run: echo "Hier Deployment-Skript aufrufen (z.B. Ansible oder Cloud-Push)" [19]
