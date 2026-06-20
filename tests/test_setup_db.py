@@ -1,5 +1,4 @@
 import sqlite3
-import pytest
 from unittest.mock import patch
 from db.setup_db import setup_database
 

@@ -13,8 +13,6 @@ jobs:
         with:
           python-version: '3.12'
 
-      # Alle Abhängigkeiten (inkl. dev-Extras) werden über pyproject.toml installiert.
-      # Das [dev]-Extra enthält pytest, pytest-cov und ruff – kein separates requirements.txt nötig.
       - name: Abhängigkeiten installieren
         run: pip install '.[dev]'
 
@@ -24,9 +22,6 @@ jobs:
       - name: Unit-Tests mit Coverage ausführen
         run: pytest -m unit --cov=src --cov-report=xml --cov-fail-under=80 -v --tb=short --log-cli-level=WARNING
 
-      # Das XML-Coverage-File wird als Artefakt gespeichert, damit es in der
-      # GitHub-UI heruntergeladen und in externe Tools (z. B. Codecov) integriert
-      # werden kann – ohne die Pipeline neu starten zu müssen.
       - name: Coverage-Report als Artefakt speichern
         uses: actions/upload-artifact@v4
         with:
@@ -44,8 +39,6 @@ jobs:
         with:
           python-version: '3.12'
 
-      # Nur Produktions- und Test-Abhängigkeiten – ruff wird hier nicht benötigt,
-      # da Linting bereits im vorherigen Job ausgeführt wurde.
       - name: Abhängigkeiten installieren
         run: pip install '.[dev]'
 

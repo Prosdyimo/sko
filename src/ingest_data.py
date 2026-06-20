@@ -1,7 +1,6 @@
 import sqlite3
 import pandas as pd
 import os
-import json  # LINTING-FEHLER 1: ungenutzter Import (flake8 F401)
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DB_PATH = os.path.join(ROOT_DIR, 'arbeitslosigkeit.db')
@@ -19,7 +18,7 @@ def _load_altersgruppen(conn):
     )
     dates = pd.to_datetime(df_long['datum_raw'])
     df_long['datum'] = dates.dt.strftime('%Y-%m')
-    n_rows=len(df_long)  # FEHLER: kein Leerzeichen um = (E225)
+    n_rows = len(df_long)
     records = list(zip(
         df_long['datum'],
         df_long['Sprachregion'],

@@ -1,6 +1,5 @@
 import pickle
 import re
-import numpy as np
 import pytest
 from unittest.mock import patch
 from sklearn.linear_model import LinearRegression
