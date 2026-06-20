@@ -131,6 +131,23 @@ def test_load_jugendliche_multiple_date_columns():
     conn.close()
 
 
+@pytest.mark.unit
+def test_ingest_calls_loaders_commit_and_close(capsys):
+    """ingest() muss Loader aufrufen, committen und Verbindung schliessen."""
+    with patch('src.ingest_data.sqlite3.connect') as connect_mock, \
+         patch('src.ingest_data._load_altersgruppen', return_value=2) as load_alt_mock, \
+         patch('src.ingest_data._load_jugendliche', return_value=3) as load_jug_mock:
+        conn = connect_mock.return_value
+        ingest()
+
+    load_alt_mock.assert_called_once_with(conn)
+    load_jug_mock.assert_called_once_with(conn)
+    conn.commit.assert_called_once()
+    conn.close.assert_called_once()
+    out = capsys.readouterr().out
+    assert 'Ingestion: 2 Altersgruppen- und 3 Jugendlichen-Zeilen geschrieben.' in out
+
+
 # ---------------------------------------------------------------------------
 # Integration-Test: ingest()
 # ---------------------------------------------------------------------------

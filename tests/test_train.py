@@ -1,6 +1,7 @@
 import pickle
 import numpy as np
 import pandas as pd
+import pytest
 from unittest.mock import patch
 from src.train import train
 
@@ -24,6 +25,7 @@ def _write_training_csv(path):
 # Integration-Tests: train()
 # ---------------------------------------------------------------------------
 
+@pytest.mark.unit
 def test_train_creates_model_file(tmp_path):
     """train() muss eine model.pkl-Datei erstellen."""
     csv_path = tmp_path / 'training_data.csv'
@@ -37,6 +39,7 @@ def test_train_creates_model_file(tmp_path):
     assert model_path.exists()
 
 
+@pytest.mark.unit
 def test_train_model_pickle_has_expected_keys(tmp_path):
     """Das gespeicherte Pickle muss 'model', 'le_region' und 'le_gruppe' enthalten."""
     csv_path = tmp_path / 'training_data.csv'
@@ -55,6 +58,7 @@ def test_train_model_pickle_has_expected_keys(tmp_path):
     assert 'le_gruppe' in model_data
 
 
+@pytest.mark.unit
 def test_train_prints_r2_and_path(tmp_path, capsys):
     """Ausgabe muss R2-Score und gespeicherten Pfad melden."""
     csv_path = tmp_path / 'training_data.csv'
@@ -70,6 +74,7 @@ def test_train_prints_r2_and_path(tmp_path, capsys):
     assert 'Modell gespeichert' in out
 
 
+@pytest.mark.unit
 def test_train_model_can_predict(tmp_path):
     """Das trainierte Modell muss für bekannte Label-Klassen einen float liefern."""
     csv_path = tmp_path / 'training_data.csv'
