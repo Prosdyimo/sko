@@ -1,0 +1,27 @@
+name: Unit Tests
+
+on: [push, pull_request]
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Abhängigkeiten installieren
+        run: pip install -r requirements.txt pytest
+
+      - name: Unit-Tests ausführen
+        run: pytest -m unit -v
+
+      - name: Integration Tests
+        run: pytest -m integration -v
+
+      - name: Linting
+        run: ruff check .

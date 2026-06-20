@@ -36,6 +36,7 @@ def _make_db():
 # Unit-Test: _load_altersgruppen
 # ---------------------------------------------------------------------------
 
+@pytest.mark.unit
 def test_load_altersgruppen_inserts_rows():
     """Prüft ob _load_altersgruppen die Zeilen korrekt transformiert und einfügt."""
     # Fake-DataFrame: Sprachregion + Gruppen + eine Datumsspalte (Timestamp hat .year)
@@ -64,6 +65,7 @@ def test_load_altersgruppen_inserts_rows():
     conn.close()
 
 
+@pytest.mark.unit
 def test_load_altersgruppen_returns_row_count():
     """Rückgabewert muss der Anzahl einzufügender Zeilen entsprechen."""
     datum_col = pd.Timestamp('2023-06-01')
@@ -83,6 +85,7 @@ def test_load_altersgruppen_returns_row_count():
 # Unit-Test: _load_jugendliche
 # ---------------------------------------------------------------------------
 
+@pytest.mark.unit
 def test_load_jugendliche_inserts_rows():
     """Prüft ob _load_jugendliche Geschlecht-Spalte korrekt verarbeitet."""
     datum_col = pd.Timestamp('2024-03-01')
@@ -109,6 +112,7 @@ def test_load_jugendliche_inserts_rows():
     conn.close()
 
 
+@pytest.mark.unit
 def test_load_jugendliche_multiple_date_columns():
     """Mehrere Datumsspalten erzeugen mehrere Zeilen (melt)."""
     d1 = pd.Timestamp('2023-01-01')

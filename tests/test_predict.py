@@ -32,6 +32,7 @@ def _write_fake_model(path):
 # Unit-Tests: predict()
 # ---------------------------------------------------------------------------
 
+@pytest.mark.unit
 def test_predict_prints_region_and_year(tmp_path, capsys):
     """Ausgabe muss Region und Jahr enthalten."""
     model_path = tmp_path / 'models' / 'model.pkl'
@@ -45,6 +46,7 @@ def test_predict_prints_region_and_year(tmp_path, capsys):
     assert '2025' in out
 
 
+@pytest.mark.unit
 def test_predict_output_contains_percentage(tmp_path, capsys):
     """Ausgabe muss einen Prozentwert im Format '0.00%' enthalten."""
     model_path = tmp_path / 'models' / 'model.pkl'
@@ -57,6 +59,7 @@ def test_predict_output_contains_percentage(tmp_path, capsys):
     assert re.search(r'\d+\.\d{2}%', out), f"Kein Prozentwert in Ausgabe: {out!r}"
 
 
+@pytest.mark.unit
 def test_predict_raises_if_model_missing():
     """Fehlende Modelldatei muss FileNotFoundError auslösen."""
     with patch('src.predict.MODEL_PATH', '/nonexistent/path/model.pkl'):
