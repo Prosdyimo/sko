@@ -7,33 +7,50 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Python einrichten
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
+      # Alle Abhängigkeiten (inkl. dev-Extras) werden über pyproject.toml installiert.
+      # Das [dev]-Extra enthält pytest, pytest-cov und ruff – kein separates requirements.txt nötig.
       - name: Abhängigkeiten installieren
-        run: pip install -r requirements.txt pytest pytest-cov ruff
+        run: pip install '.[dev]'
 
-      - name: Linting (Fail Fast)
-        run: ruff check . 
+      - name: Linting (ruff)
+        run: ruff check .
 
-      - name: Unit-Tests ausführen
-        run: pytest -m unit --cov=dein_projekt --cov-fail-under=80 -v
+      - name: Unit-Tests mit Coverage ausführen
+        run: pytest -m unit --cov=src --cov-report=xml --cov-fail-under=80 -v --tb=short --log-cli-level=WARNING
+
+      # Das XML-Coverage-File wird als Artefakt gespeichert, damit es in der
+      # GitHub-UI heruntergeladen und in externe Tools (z. B. Codecov) integriert
+      # werden kann – ohne die Pipeline neu starten zu müssen.
+      - name: Coverage-Report als Artefakt speichern
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
 
   integration-tests:
     needs: lint-and-unit-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Python einrichten
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      # Nur Produktions- und Test-Abhängigkeiten – ruff wird hier nicht benötigt,
+      # da Linting bereits im vorherigen Job ausgeführt wurde.
       - name: Abhängigkeiten installieren
-        run: pip install -r requirements.txt pytest
-      - name: Integration Tests
-        run: pytest -m integration -v
+        run: pip install '.[dev]'
+
+      - name: Integration-Tests ausführen
+        run: pytest -m integration -v --tb=long --log-cli-level=WARNING
 
   deploy-staging:
     needs: integration-tests
@@ -41,4 +58,4 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Deployment zu Staging
-        run: echo "Hier Deployment-Skript aufrufen (z.B. Ansible oder Cloud-Push)" [19]
+        run: echo "Hier Deployment-Skript aufrufen (z.B. Ansible oder Cloud-Push)"
