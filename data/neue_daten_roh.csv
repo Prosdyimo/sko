@@ -1,0 +1,21 @@
+dataset,datum,region,altersgruppe,geschlecht,arbeitslosenquote
+altersgruppen,1993-01,Deutsche Schweiz,25-49 Jahre,,3.4
+altersgruppen,1993-01,Deutsche Schweiz,50-64 Jahre,,2.6
+altersgruppen,1993-01,Deutsche Schweiz,65 und mehr,,1.1
+altersgruppen,1993-01,Westschweiz und Tessin,15-24 Jahre,,6.9
+altersgruppen,1993-01,Westschweiz und Tessin,25-49 Jahre,,6.1
+altersgruppen,1993-01,Westschweiz und Tessin,50-64 Jahre,,4.3
+altersgruppen,1993-01,Westschweiz und Tessin,65 und mehr,,2.2
+altersgruppen,1993-01,Arbeitslosenquote,alle,,3.9
+altersgruppen,1993-02,Deutsche Schweiz,25-49 Jahre,,3.7
+altersgruppen,1993-02,Deutsche Schweiz,50-64 Jahre,,2.7
+altersgruppen,1993-02,Deutsche Schweiz,65 und mehr,,1.1
+altersgruppen,1993-02,Westschweiz und Tessin,15-24 Jahre,,6.9
+jugendliche,1993-01,Deutsche Schweiz,Jugendliche,Männer,3.5
+jugendliche,1993-01,Deutsche Schweiz,Jugendliche,Frauen,2.8
+jugendliche,1993-01,Westschweiz und Tessin,Jugendliche,Männer,7.5
+jugendliche,1993-01,Westschweiz und Tessin,Jugendliche,Frauen,6.3
+jugendliche,1993-02,Deutsche Schweiz,Jugendliche,Männer,3.5
+jugendliche,1993-02,Deutsche Schweiz,Jugendliche,Frauen,2.9
+jugendliche,1993-02,Westschweiz und Tessin,Jugendliche,Männer,7.3
+jugendliche,1993-02,Westschweiz und Tessin,Jugendliche,Frauen,6.3
